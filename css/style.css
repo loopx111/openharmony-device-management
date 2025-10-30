@@ -1,0 +1,270 @@
+/* 基础样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'HarmonyOS Sans', 'Microsoft YaHei', sans-serif;
+    background: #000;
+}
+
+/* 播放器容器 */
+#player-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+
+/* 视频播放器样式 */
+.video-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
+
+.video-player.active {
+    opacity: 1;
+    z-index: 10;
+}
+
+.video-player.inactive {
+    opacity: 0;
+    z-index: 5;
+}
+
+/* 图片显示容器样式 */
+.image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    z-index: 15;
+}
+
+.image-container.active {
+    opacity: 1;
+    z-index: 15;
+}
+
+.image-container.inactive {
+    opacity: 0;
+    z-index: 5;
+}
+
+.image-container.hidden {
+    display: none;
+}
+
+.image-container.hidden {
+    display: none;
+}
+
+.image-display {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+}
+
+/* 加载遮罩 */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #007dff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    margin-top: 20px;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 错误遮罩 */
+.error-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
+}
+
+.error-overlay.hidden {
+    display: none;
+}
+
+.error-content {
+    text-align: center;
+    color: #fff;
+    max-width: 80%;
+}
+
+.error-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.error-text {
+    font-size: 18px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.retry-btn {
+    background: #007dff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.retry-btn:hover {
+    background: #0056cc;
+}
+
+/* 网络状态指示器 */
+.network-status {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    z-index: 40;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    transition: background 0.3s;
+}
+
+.status-dot.connected {
+    background: #4CAF50;
+    animation: pulse 2s infinite;
+}
+
+.status-dot.connecting {
+    background: #FFC107;
+}
+
+.status-dot.disconnected {
+    background: #F44336;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* 性能监控面板 */
+.performance-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 40;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.performance-panel.hidden {
+    display: none;
+}
+
+.performance-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.performance-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .loading-text {
+        font-size: 14px;
+    }
+    
+    .error-text {
+        font-size: 16px;
+    }
+    
+    .network-status {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+    }
+}
+
+/* 鸿蒙系统优化 */
+@media (prefers-color-scheme: dark) {
+    .loading-overlay {
+        background: rgba(0, 0, 0, 0.95);
+    }
+    
+    .error-overlay {
+        background: rgba(0, 0, 0, 0.95);
+    }
+}

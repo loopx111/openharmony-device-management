@@ -1,0 +1,20 @@
+{
+  "name": "ad-screen-player",
+  "version": "1.0.0",
+  "description": "鸿蒙广告屏播放器",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'No build process needed for static files'",
+    "test": "echo 'No tests specified'"
+  },
+  "dependencies": {
+    "mqtt": "^4.3.7"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "keywords": ["ad-screen", "player", "harmonyos", "mqtt"],
+  "author": "Developer",
+  "license": "MIT"
+}

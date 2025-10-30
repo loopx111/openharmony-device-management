@@ -1,0 +1,35 @@
+{
+  "mqtt": {
+    "host": "192.168.30.55",
+    "port": 8081,
+    "clientId": "ad_001",
+    "username": "",
+    "password": "",
+    "keepalive": 60,
+    "devicePath": "设备/区域/南京/鼓楼"
+  },
+  "player": {
+    "autoPlay": true,
+    "loopPlaylist": true,
+    "preloadCount": 3,
+    "volume": 1.0,
+    "muted": true
+  },
+  "cache": {
+    "maxMemoryCache": 500,
+    "maxDiskCache": 2048,
+    "cleanupInterval": 300000
+  },
+  "ui": {
+    "showNetworkStatus": true,
+    "showPerformance": false,
+    "fullscreen": true,
+    "kioskMode": true
+  },
+  "monitoring": {
+    "enablePerformance": true,
+    "enableLogging": true,
+    "logRetention": 1000,
+    "reportInterval": 30000
+  }
+}
