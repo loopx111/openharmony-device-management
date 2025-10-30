@@ -279,6 +279,12 @@ class VideoPlayer {
             this.currentPlayer.src = nextVideo.downloadUrl || nextVideo.url;
         }
         
+        // 设置视频属性，确保声音状态一致
+        this.currentPlayer.muted = true; // 新视频默认静音
+        this.currentPlayer.volume = 0.8;
+        this.currentPlayer.autoplay = true;
+        this.currentPlayer.loop = false;
+        
         // 淡入淡出切换
         this.currentPlayer.classList.add('active');
         this.currentPlayer.classList.remove('inactive');
@@ -287,7 +293,13 @@ class VideoPlayer {
         this.nextPlayer.classList.remove('active');
         
         // 播放新视频
-        this.currentPlayer.play().catch(error => {
+        this.currentPlayer.play().then(() => {
+            console.log('视频切换播放成功');
+            
+            // 重新设置用户交互监听以激活声音
+            this.setupUserInteractionForAudio();
+            
+        }).catch(error => {
             console.error('播放失败:', error);
             this.showError('播放失败，请检查网络连接');
         });
@@ -308,7 +320,17 @@ class VideoPlayer {
     }
     
     onVideoEnded() {
-        this.switchToNextVideo();
+        // 检查下一个媒体类型，如果是图片则使用switchToNextMedia，否则使用switchToNextVideo
+        const nextIndex = (this.currentIndex + 1) % this.playOrder.length;
+        const nextVideo = this.playlist[this.playOrder[nextIndex]];
+        const fileUrl = nextVideo.downloadUrl || nextVideo.url;
+        const fileFormat = this.getFileFormat(fileUrl);
+        
+        if (fileFormat === 'image') {
+            this.switchToNextMedia();
+        } else {
+            this.switchToNextVideo();
+        }
     }
     
     onVideoError(event) {
@@ -989,6 +1011,10 @@ class VideoPlayer {
         this.currentPlayer.autoplay = true;
         this.currentPlayer.loop = false;
         
+        // 确保另一个播放器也是静音状态
+        this.nextPlayer.muted = true;
+        this.nextPlayer.volume = 0.8;
+        
         console.log('开始播放视频:', this.currentPlayer.src);
         console.log('视频属性:', {
             muted: this.currentPlayer.muted,
@@ -1101,9 +1127,9 @@ class VideoPlayer {
             return false;
         }
         
-        // 首先检查是否为blob:null格式（页面刷新后失效的URL）
+        // 页面刷新后，blob:null/格式的URL确实会失效，需要特殊处理
         if (blobUrl.startsWith('blob:null/')) {
-            console.warn('检测到失效的Blob URL（blob:null格式）:', blobUrl);
+            console.warn('检测到页面刷新后失效的Blob URL:', blobUrl);
             return false;
         }
         
@@ -1119,18 +1145,7 @@ class VideoPlayer {
             return false;
         }
         
-        // 使用同步检查方法（避免异步复杂性）
-        try {
-            const tempVideo = document.createElement('video');
-            tempVideo.src = blobUrl;
-            
-            // 快速检查：如果URL格式正确且不是blob:null，认为有效
-            // 实际的加载错误会在视频播放时捕获并处理
-            return true;
-        } catch (error) {
-            console.warn('Blob URL检查失败:', blobUrl, error);
-            return false;
-        }
+        return true;
     }
     
 
@@ -1268,6 +1283,7 @@ class VideoPlayer {
         // 如果已经设置过监听器，先移除
         if (this.userInteractionHandler) {
             document.removeEventListener('click', this.userInteractionHandler);
+            this.userInteractionHandler = null;
         }
         
         this.userInteractionHandler = () => {
@@ -1279,41 +1295,8 @@ class VideoPlayer {
                 this.currentPlayer.muted = false;
                 console.log('声音已激活');
                 
-                // 移除监听器，避免重复触发
-                document.removeEventListener('click', this.userInteractionHandler);
-                this.userInteractionHandler = null;
-                
-                // 发送声音激活事件
-                window.dispatchEvent(new CustomEvent('video:audio-activated', {
-                    detail: {
-                        src: this.currentPlayer.src,
-                        timestamp: Date.now()
-                    }
-                }));
-            }
-        };
-        
-        // 添加点击事件监听
-        document.addEventListener('click', this.userInteractionHandler);
-        
-        console.log('已设置用户交互监听，点击页面可激活声音');
-    }
-    
-    // 设置用户交互监听以激活声音
-    setupUserInteractionForAudio() {
-        // 如果已经设置过监听器，先移除
-        if (this.userInteractionHandler) {
-            document.removeEventListener('click', this.userInteractionHandler);
-        }
-        
-        this.userInteractionHandler = () => {
-            console.log('用户交互，尝试激活声音...');
-            
-            // 检查视频是否正在播放
-            if (!this.currentPlayer.paused) {
-                // 尝试取消静音
-                this.currentPlayer.muted = false;
-                console.log('声音已激活');
+                // 同时确保另一个播放器也是非静音状态
+                this.nextPlayer.muted = false;
                 
                 // 移除监听器，避免重复触发
                 document.removeEventListener('click', this.userInteractionHandler);
@@ -1462,6 +1445,13 @@ class VideoPlayer {
     showImage(url) {
         console.log('显示图片:', url);
         
+        // 检查是否已经在显示相同的图片，避免重复加载
+        if (this.imageDisplay && this.imageDisplay.src === url) {
+            console.log('图片已经在显示中，跳过重复加载');
+            this.hideLoading();
+            return;
+        }
+        
         // 隐藏视频播放器
         if (this.currentPlayer) {
             this.currentPlayer.classList.add('hidden');
@@ -1482,14 +1472,43 @@ class VideoPlayer {
                 console.log('图片加载成功');
                 this.hideLoading();
                 
-                // 图片显示完成后，设置定时切换到下一个媒体
-                setTimeout(() => {
-                    this.switchToNextMedia();
-                }, 5000); // 图片显示5秒后切换
+                // 只有当播放列表中有多个媒体时才自动切换
+                if (this.playlist.length > 1) {
+                    // 图片显示完成后，设置定时切换到下一个媒体
+                    setTimeout(() => {
+                        this.switchToNextMedia();
+                    }, 5000); // 图片显示5秒后切换
+                } else {
+                    console.log('播放列表中只有一个媒体，保持显示不切换');
+                }
             };
             
-            this.imageDisplay.onerror = (error) => {
+            this.imageDisplay.onerror = async (error) => {
                 console.error('图片加载失败:', error);
+                
+                // 如果是Blob URL失效导致的错误，尝试重新下载文件
+                if (url.startsWith('blob:') && url.startsWith('blob:null/')) {
+                    console.warn('Blob URL失效，尝试重新下载文件');
+                    
+                    try {
+                        const currentVideo = this.playlist[this.playOrder[this.currentIndex]];
+                        const fileUrl = currentVideo.downloadUrl || currentVideo.url;
+                        
+                        // 重新下载文件
+                        await this.downloadFile(fileUrl, currentVideo.id || currentVideo.url);
+                        
+                        // 获取新的文件路径
+                        const newLocalFilePath = this.localFiles.get(currentVideo.id || currentVideo.url);
+                        if (newLocalFilePath) {
+                            console.log('文件重新下载成功，重新显示图片');
+                            this.imageDisplay.src = newLocalFilePath;
+                            return;
+                        }
+                    } catch (downloadError) {
+                        console.error('文件重新下载失败:', downloadError);
+                    }
+                }
+                
                 this.showError('图片加载失败');
             };
         }
@@ -1498,6 +1517,12 @@ class VideoPlayer {
     // 切换到下一个媒体（视频或图片）
     switchToNextMedia() {
         if (this.playlist.length === 0) return;
+        
+        // 如果只有一个媒体，不进行切换
+        if (this.playlist.length === 1) {
+            console.log('播放列表中只有一个媒体，不进行切换');
+            return;
+        }
         
         // 更新索引
         this.currentIndex = (this.currentIndex + 1) % this.playOrder.length;
