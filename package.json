@@ -2,17 +2,50 @@
   "name": "ad-screen-player",
   "version": "1.0.0",
   "description": "鸿蒙广告屏播放器",
-  "main": "index.html",
+  "main": "main.js",
   "scripts": {
-    "dev": "npx serve .",
-    "build": "echo 'No build process needed for static files'",
-    "test": "echo 'No tests specified'"
+    "dev": "npm run dev:h5",
+    "build": "npm run build:h5",
+    "dev:h5": "cross-env NODE_ENV=development UNI_PLATFORM=h5 vue-cli-service uni-serve",
+    "build:h5": "cross-env NODE_ENV=production UNI_PLATFORM=h5 vue-cli-service uni-build",
+    "dev:app-plus": "cross-env NODE_ENV=development UNI_PLATFORM=app-plus vue-cli-service uni-build --watch",
+    "build:app-plus": "cross-env NODE_ENV=production UNI_PLATFORM=app-plus vue-cli-service uni-build"
   },
   "dependencies": {
+    "@dcloudio/uni-app": "^2.0.0-34920230324001",
+    "@dcloudio/uni-app-plus": "^2.0.0-34920230324001",
+    "@dcloudio/uni-h5": "^2.0.0-34920230324001",
+    "@dcloudio/uni-mp-weixin": "^2.0.0-34920230324001",
+    "@dcloudio/uni-stat": "^2.0.0-34920230324001",
+    "@dcloudio/uni-i18n": "^2.0.0-34920230324001",
+    "@dcloudio/uni-components": "^2.0.0-34920230324001",
+    "vue": "^2.6.11",
+    "vuex": "^3.6.2",
     "mqtt": "^4.3.7"
   },
   "devDependencies": {
-    "serve": "^14.2.1"
+    "@dcloudio/uni-cli-shared": "^2.0.0-34920230324001",
+    "@dcloudio/vue-cli-plugin-hbuilderx": "^2.0.0-34920230324001",
+    "@dcloudio/vue-cli-plugin-uni": "^2.0.0-34920230324001",
+    "@dcloudio/vue-cli-plugin-uni-optimize": "^2.0.0-34920230324001",
+    "@vue/cli-plugin-babel": "^4.5.0",
+    "@vue/cli-plugin-eslint": "^4.5.0",
+    "@vue/cli-service": "^4.5.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "Android >= 4.4",
+    "ios >= 9"
+  ],
+  "uni-app": {
+    "scripts": {}
   },
   "keywords": ["ad-screen", "player", "harmonyos", "mqtt"],
   "author": "Developer",

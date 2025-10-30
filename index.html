@@ -2,9 +2,28 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>鸿蒙广告屏播放器</title>
     <link rel="stylesheet" href="css/style.css">
+    
+    <!-- 检测APP环境 -->
+    <script>
+        // 检测是否在HBuilderX打包的APP中运行
+        window.isAppEnvironment = typeof plus !== 'undefined';
+        
+        // 如果是APP环境，禁用一些浏览器特性
+        if (window.isAppEnvironment) {
+            // 禁用长按菜单
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            
+            // 禁用选择文本
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+            });
+        }
+    </script>
 </head>
 <body>
     <!-- 主播放器容器 -->

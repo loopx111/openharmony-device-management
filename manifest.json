@@ -1,0 +1,55 @@
+{
+    "name" : "鸿蒙广告屏播放器",
+    "appid" : "__UNI__ADSCREENPLAYER001",
+    "description" : "基于HTML5的商用广告屏播放器",
+    "versionName" : "1.2.0",
+    "versionCode" : "120",
+    "transformPx" : false,
+    "app-plus" : {
+        "usingComponents" : true,
+        "nvueStyleCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
+        },
+        "modules" : {},
+        "distribute" : {
+            "android" : {
+                "permissions" : [
+                    "<uses-permission android:name=\"android.permission.INTERNET\" />",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
+                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                    "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />"
+                ]
+            },
+            "ios" : {
+                "dSYMs" : false
+            },
+            "sdkConfigs" : {}
+        }
+    },
+    "quickapp" : {},
+    "mp-weixin" : {
+        "appid" : "",
+        "setting" : {
+            "urlCheck" : false
+        },
+        "usingComponents" : true
+    },
+    "mp-alipay" : {
+        "usingComponents" : true
+    },
+    "mp-baidu" : {
+        "usingComponents" : true
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true
+    },
+    "uniStatistics" : {
+        "enable" : false
+    }
+}
