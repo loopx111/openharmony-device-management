@@ -8,7 +8,7 @@
 export default {
 	data() {
 		return {
-			webViewUrl: '../../index.html'
+			webViewUrl: '../../static/index.html'
 		}
 	},
 	

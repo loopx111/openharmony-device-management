@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>鸿蒙广告屏播放器</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- 检测APP环境 -->
+    <script>
+        // 检测是否在HBuilderX打包的APP中运行
+        window.isAppEnvironment = typeof plus !== 'undefined';
+        
+        // 如果是APP环境，禁用一些浏览器特性
+        if (window.isAppEnvironment) {
+            // 禁用长按菜单
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            
+            // 禁用选择文本
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- 主播放器容器 -->
+    <div id="player-container">
+        <!-- 双video标签实现无缝切换 -->
+        <video id="video1" class="video-player" preload="auto" muted playsinline></video>
+        <video id="video2" class="video-player" preload="auto" muted playsinline></video>
+        
+        <!-- 图片显示容器 -->
+        <div id="image-container" class="image-container hidden">
+            <img id="image-display" class="image-display" src="" alt="广告图片">
+        </div>
+        
+        <!-- 加载动画 -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">视频加载中...</div>
+        </div>
+        
+        <!-- 错误提示 -->
+        <div id="error-overlay" class="error-overlay hidden">
+            <div class="error-content">
+                <div class="error-icon">⚠️</div>
+                <div class="error-text" id="error-message"></div>
+                <button id="retry-btn" class="retry-btn">重试</button>
+            </div>
+        </div>
+        
+        <!-- 网络状态指示器 -->
+        <div id="network-status" class="network-status">
+            <div class="status-dot" id="status-dot"></div>
+            <span id="status-text">连接中...</span>
+        </div>
+    </div>
+
+    <!-- 性能监控面板（开发模式显示） -->
+    <div id="performance-panel" class="performance-panel hidden">
+        <div class="performance-item">
+            <span>帧率:</span>
+            <span id="fps-counter">0</span>
+        </div>
+        <div class="performance-item">
+            <span>内存:</span>
+            <span id="memory-usage">0MB</span>
+        </div>
+        <div class="performance-item">
+            <span>卡顿:</span>
+            <span id="stutter-rate">0%</span>
+        </div>
+    </div>
+
+    <script>
+        // 内联配置，避免CORS问题
+        window.AD_SCREEN_CONFIG = {
+            "mqtt": {
+                "host": "192.168.30.55",
+                "port": 8081,
+                "clientId": "ad_001",
+                "username": "",
+                "password": "",
+                "keepalive": 60,
+                "devicePath": "设备/区域/南京/鼓楼"
+            },
+            "player": {
+                "autoPlay": true,
+                "loopPlaylist": true,
+                "preloadCount": 3,
+                "volume": 1.0,
+                "muted": true
+            },
+            "cache": {
+                "maxMemoryCache": 500,
+                "maxDiskCache": 2048,
+                "cleanupInterval": 300000
+            },
+            "ui": {
+                "showNetworkStatus": true,
+                "showPerformance": false,
+                "fullscreen": true,
+                "kioskMode": true
+            },
+            "monitoring": {
+                "enablePerformance": true,
+                "enableLogging": true,
+                "logRetention": 1000,
+                "reportInterval": 30000
+            }
+        };
+    </script>
+    
+    <!-- 使用本地MQTT.js库 -->
+    <script src="/static/js/mqtt.min.js"></script>
+    <script src="/static/js/video-player.js"></script>
+    <script src="/static/js/cache-manager.js"></script>
+    <script src="/static/js/mqtt-client.js"></script>
+    <script src="/static/js/monitor.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

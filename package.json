@@ -1,6 +1,6 @@
 {
   "name": "ad-screen-player",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "description": "鸿蒙广告屏播放器",
   "main": "main.js",
   "scripts": {
@@ -12,22 +12,11 @@
     "build:app-plus": "cross-env NODE_ENV=production UNI_PLATFORM=app-plus vue-cli-service uni-build"
   },
   "dependencies": {
-    "@dcloudio/uni-app": "^2.0.0-34920230324001",
-    "@dcloudio/uni-app-plus": "^2.0.0-34920230324001",
-    "@dcloudio/uni-h5": "^2.0.0-34920230324001",
-    "@dcloudio/uni-mp-weixin": "^2.0.0-34920230324001",
-    "@dcloudio/uni-stat": "^2.0.0-34920230324001",
-    "@dcloudio/uni-i18n": "^2.0.0-34920230324001",
-    "@dcloudio/uni-components": "^2.0.0-34920230324001",
     "vue": "^2.6.11",
     "vuex": "^3.6.2",
     "mqtt": "^4.3.7"
   },
   "devDependencies": {
-    "@dcloudio/uni-cli-shared": "^2.0.0-34920230324001",
-    "@dcloudio/vue-cli-plugin-hbuilderx": "^2.0.0-34920230324001",
-    "@dcloudio/vue-cli-plugin-uni": "^2.0.0-34920230324001",
-    "@dcloudio/vue-cli-plugin-uni-optimize": "^2.0.0-34920230324001",
     "@vue/cli-plugin-babel": "^4.5.0",
     "@vue/cli-plugin-eslint": "^4.5.0",
     "@vue/cli-service": "^4.5.0",
